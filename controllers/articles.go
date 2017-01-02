@@ -4,6 +4,8 @@ import (
 	"path"
 	"strings"
     _"encoding/json"
+    "strconv"
+    "time"
 	"github.com/astaxie/beego"
     "github.com/astaxie/beego/orm"
 	"beeadmin/models"
@@ -13,36 +15,37 @@ type TopicController struct {
 	BaseController
 }
 
-func (this *TopicController) Get() {
-	this.Data["IsTopic"] = true
-	this.TplName = "topic.html"
-	this.Data["IsLogin"] = checkAccount(this.Ctx)
-
-	topics, err := models.GetAllTopics("", "", false)
-	if err != nil {
-		beego.Error(err)
-	}
-	this.Data["Topics"] = topics
-}
-
 func (this *TopicController)Articles(){
-    pageNo := this.Input().Get("page")
+    this.TplName = "articles.tpl"
+    page,err:= strconv.Atoi(this.Input().Get("page"))
+    if err != nil {
+        return
+    }
+    if page < 1 {
+        page = 1
+    }
+    offset, _ := beego.AppConfig.Int("pageoffset")
     //todo 这里要判断前台是否传递了pageNo参数
+    start := (page - 1) * offset
     o := orm.NewOrm()
-    topics = make([]*Topic, 0)
+    topics := make([]*models.Article, 0)
     qs := o.QueryTable("topic")
-    qs = qs.limit(pageNo*10,)
-
+    qs = qs.Limit(offset,start)
+    _,err = qs.All(&topics)
+    if err != nil{
+      return
+    }
+    this.Data["Articles"] =  topics
+    
 }
 
-func (this *TopicController) Post() {
+func (this *TopicController) Save() {
 	if !checkAccount(this.Ctx) {
 		this.Redirect("/login", 302)
 		return
 	}
 
 	// 解析表单
-	tid := this.Input().Get("tid")
 	title := this.Input().Get("title")
 	content := this.Input().Get("content")
 	category := this.Input().Get("category")
@@ -65,17 +68,56 @@ func (this *TopicController) Post() {
 		}
 	}
 
-	if len(tid) == 0 {
-		err = models.AddTopic(title, category, lable, content, attachment)
-	} else {
-		err = models.ModifyTopic(tid, title, category, lable, content, attachment)
-	}
+    lable = "$" + strings.Join(strings.Split(lable, " "), "#$") + "#"
+    o := orm.NewOrm()
+    categ,er:= strconv.ParseInt(category, 10, 64)
+    if er!=nil{
+       beego.Error(err)
+    }
+    cate := models.Category{Id:categ}
+    qs := o.QueryTable("category")
+    err = qs.Filter("id", cate).One(cate)
+    if err != nil {
+        beego.Error(err)
+    }
+    article :=new(models.Article)
+    article.Title = title
+    article.Category = &cate
+    article.Lables = lable
+    article.Content = content
+    article.ReplyTime = time.Now()
+    article.Attachment = attachment
+    article.Created = time.Now()
+    article.Updated = time.Now()
+    //topic := &models.Article{
+    //    Title:      title,
+    //    Category:   *cate,
+    //    Lables:     lable,
+    //    Content:    content,
+    //    ReplyTime:  time.Now(),
+    //    Attachment: attachment,
+    //    Created:    time.Now(),
+    //    Updated:    time.Now(),
+    //}
+    _, err = o.Insert(article)
 
 	if err != nil {
 		beego.Error(err)
 	}
 
-	this.Redirect("/topic", 302)
+	this.Redirect("/articles", 302)
+}
+
+func (this *TopicController) AddPage(){
+    o := orm.NewOrm()
+    cates := make([]*models.Category, 0)
+    qs := o.QueryTable("category")
+    _, err := qs.All(&cates)
+    this.TplName = "addArticle.tpl"
+    this.Data["Categories"] = cates
+    if err != nil {
+        beego.Error(err)
+    }
 }
 
 func (this *TopicController) Add() {
@@ -104,10 +146,21 @@ func (this *TopicController) Delete() {
 		return
 	}
 
-	err := models.DeleteTopic(this.Input().Get("tid"))
-	if err != nil {
-		beego.Error(err)
-	}
+	tid :=this.Input().Get("tid")
+    tidNum, err := strconv.ParseInt(tid, 10, 64)
+    if err != nil {
+         beego.Error(err)
+    }
+
+    o := orm.NewOrm()
+
+    topic := &models.Article{Id: tidNum}
+    if o.Read(topic) == nil {
+        _, err = o.Delete(topic)
+        if err != nil {
+            beego.Error(err)
+        }
+    }
 
 	this.Redirect("/topic", 302)
 }
@@ -120,11 +173,25 @@ func (this *TopicController) Modify() {
 	this.TplName = "topic_modify.html"
 
 	tid := this.Input().Get("tid")
-	topic, err := models.GetTopic(tid)
+    tidNum, err := strconv.ParseInt(tid, 10, 64)
+    if err != nil {
+        beego.Error(err)
+    }
+
+    o := orm.NewOrm()
+
+    topic := new(models.Article)
+    qs := o.QueryTable("article")
+    err = qs.Filter("id", tidNum).One(topic)
+    if err != nil {
+        beego.Error(err)
+    }
+
+    topic.Lables = strings.Replace(strings.Replace(
+        topic.Lables, "#", " ", -1), "$", "", -1)
 	if err != nil {
 		beego.Error(err)
 		this.Redirect("/", 302)
-		return
 	}
 	this.Data["Topic"] = topic
 	this.Data["Tid"] = tid
@@ -137,21 +204,24 @@ func (this *TopicController) View() {
 	reqUrl := this.Ctx.Request.RequestURI
 	i := strings.LastIndex(reqUrl, "/")
 	tid := reqUrl[i+1:]
-	topic, err := models.GetTopic(tid)
+    tidNum, err := strconv.ParseInt(tid, 10, 64)
+    if err != nil {
+        beego.Error(err)
+    }
+    o := orm.NewOrm()
+    topic := new(models.Article)
+    qs := o.QueryTable("article")
+    err = qs.Filter("id", tidNum).One(topic)
+    if err != nil {
+        beego.Error(err)
+    }
+
+    topic.Lables = strings.Replace(strings.Replace(
+        topic.Lables, "#", " ", -1), "$", "", -1)
 	if err != nil {
 		beego.Error(err)
-		this.Redirect("/", 302)
-		return
+		this.Redirect("/articles", 302)
 	}
 	this.Data["Topic"] = topic
 	this.Data["Lables"] = strings.Split(topic.Lables, " ")
-
-	replies, err := models.GetAllReplies(tid)
-	if err != nil {
-		beego.Error(err)
-		return
-	}
-
-	this.Data["Replies"] = replies
-	this.Data["IsLogin"] = checkAccount(this.Ctx)
 }

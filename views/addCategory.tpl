@@ -58,13 +58,27 @@
                                             <span class="help-block">This is sample of text field</span>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-xs-12 control-label">父级分类：</label>
+                                        <div class="col-md-6 col-xs-12">                                            
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                <select class="form-control select">
+                                                {{range .Categories}}
+                                                    <option value="{{.Id}}">{{.Title}}</option>
+                                                {{end}}
+                                                </select>
+                                            </div>                                            
+                                            <span class="help-block">This is sample of text field</span>
+                                        </div>
+                                    </div>
                                     
                                     <div class="form-group">                                        
                                         <label class="col-md-3 col-xs-12 control-label">备注：</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-envelope-o"></span></span>
-                                                <input type="text" class="form-control"/>
+                                                <input type="text" class="form-control" name="desc"/>
                                             </div>            
                                             <span class="help-block">Password field sample</span>
                                         </div>

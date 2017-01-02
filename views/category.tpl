@@ -49,8 +49,9 @@
                                     <tr>
                                         <th>编号</th>
                                         <th>名称</th>
+                                        <th>父类</th>
                                         <th>备注</th>
-                                        <th>actions</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -58,6 +59,7 @@
                                     <tr id="{{.Id}}">
                                         <td class="text-center">{{.Id}}</td>
                                         <td><strong>{{.Title}}</strong></td>
+                                        <td><strong>{{.Parent}}</strong></td>
                                         <td><strong>{{.Title}}</strong></td>
                                         <td>
                                             <a href="/category/edit?id={{.Id}}" class="btn btn-default btn-rounded btn-sm">

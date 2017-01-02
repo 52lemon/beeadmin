@@ -25,7 +25,7 @@
 
         <!-- PAGE TITLE -->
         <div class="page-title">
-            <h2><span class="fa fa-arrow-circle-o-left"></span> 分类列表</h2>
+            <h2><span class="fa fa-arrow-circle-o-left"></span> 文章列表</h2>
         </div>
         <!-- END PAGE TITLE -->
 
@@ -38,7 +38,7 @@
                     <div class="panel panel-default">
 
                         <div class="panel-heading">
-                            <h3 class="panel-title"><a href="/category/add" class="btn btn-success btn-block">新增</a></h3>
+                            <h3 class="panel-title"><a href="/article/add" class="btn btn-success btn-block">新增</a></h3>
                         </div>
 
                         <div class="panel-body panel-body-table">
@@ -49,16 +49,19 @@
                                     <tr>
                                         <th>编号</th>
                                         <th>名称</th>
+                                        <th>分类</th>
+                                        <th>浏览量</th>
                                         <th>备注</th>
-                                        <th>actions</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {{range .Categories}}
+                                    {{range .Articles}}
                                     <tr id="{{.Id}}">
                                         <td class="text-center">{{.Id}}</td>
                                         <td><strong>{{.Title}}</strong></td>
-                                        <td><strong>{{.Title}}</strong></td>
+                                        <td><strong>{{.Category}}</strong></td>
+                                        <td><strong>{{.Views}}</strong></td>
                                         <td>
                                             <a href="/category/edit?id={{.Id}}" class="btn btn-default btn-rounded btn-sm">
                                                 <span class="fa fa-pencil"></span>
