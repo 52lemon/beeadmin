@@ -51,7 +51,7 @@
                                         <th>名称</th>
                                         <th>分类</th>
                                         <th>浏览量</th>
-                                        <th>备注</th>
+                                        <th>内容</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -60,10 +60,11 @@
                                     <tr id="{{.Id}}">
                                         <td class="text-center">{{.Id}}</td>
                                         <td><strong>{{.Title}}</strong></td>
-                                        <td><strong>{{.Category}}</strong></td>
+                                        <td><strong>{{.Category.Id}}</strong></td>
                                         <td><strong>{{.Views}}</strong></td>
+                                        <td><strong>{{html2str .Content}}</strong></td>
                                         <td>
-                                            <a href="/category/edit?id={{.Id}}" class="btn btn-default btn-rounded btn-sm">
+                                            <a href="/article/edit?id={{.Id}}" class="btn btn-default btn-rounded btn-sm">
                                                 <span class="fa fa-pencil"></span>
                                             </a>
                                             <button class="btn btn-danger btn-rounded btn-sm" onClick="delete_row('{{.Id}}');">

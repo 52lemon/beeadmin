@@ -63,7 +63,7 @@
                                         <div class="col-md-6 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <select class="form-control select">
+                                                <select class="form-control select" name="cid">
                                                 {{range .Categories}}
                                                     <option value="{{.Id}}">{{.Title}}</option>
                                                 {{end}}

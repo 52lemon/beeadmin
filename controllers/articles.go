@@ -6,6 +6,7 @@ import (
     _"encoding/json"
     "strconv"
     "time"
+    "fmt"
 	"github.com/astaxie/beego"
     "github.com/astaxie/beego/orm"
 	"beeadmin/models"
@@ -17,9 +18,11 @@ type TopicController struct {
 
 func (this *TopicController)Articles(){
     this.TplName = "articles.tpl"
-    page,err:= strconv.Atoi(this.Input().Get("page"))
+    pg := this.Input().Get("page")
+    fmt.Println("page == %s",pg)
+    page,err:= strconv.Atoi(pg)
     if err != nil {
-        return
+        page =1
     }
     if page < 1 {
         page = 1
@@ -29,11 +32,11 @@ func (this *TopicController)Articles(){
     start := (page - 1) * offset
     o := orm.NewOrm()
     topics := make([]*models.Article, 0)
-    qs := o.QueryTable("topic")
+    qs := o.QueryTable("article")
     qs = qs.Limit(offset,start)
     _,err = qs.All(&topics)
     if err != nil{
-      return
+      fmt.Println(err)
     }
     this.Data["Articles"] =  topics
     
@@ -74,31 +77,22 @@ func (this *TopicController) Save() {
     if er!=nil{
        beego.Error(err)
     }
-    cate := models.Category{Id:categ}
+    cate := &models.Category{Id:categ}
     qs := o.QueryTable("category")
     err = qs.Filter("id", cate).One(cate)
     if err != nil {
         beego.Error(err)
     }
-    article :=new(models.Article)
-    article.Title = title
-    article.Category = &cate
-    article.Lables = lable
-    article.Content = content
-    article.ReplyTime = time.Now()
-    article.Attachment = attachment
-    article.Created = time.Now()
-    article.Updated = time.Now()
-    //topic := &models.Article{
-    //    Title:      title,
-    //    Category:   *cate,
-    //    Lables:     lable,
-    //    Content:    content,
-    //    ReplyTime:  time.Now(),
-    //    Attachment: attachment,
-    //    Created:    time.Now(),
-    //    Updated:    time.Now(),
-    //}
+    article := &models.Article{
+        Title:      title,
+        Category:   cate,
+        Lables:     lable,
+        Content:    content,
+        ReplyTime:  time.Now(),
+        Attachment: attachment,
+        Created:    time.Now(),
+        Updated:    time.Now(),
+    }
     _, err = o.Insert(article)
 
 	if err != nil {
@@ -120,24 +114,29 @@ func (this *TopicController) AddPage(){
     }
 }
 
-func (this *TopicController) Add() {
-	if !checkAccount(this.Ctx) {
-		this.Redirect("/login", 302)
-		return
-	}
-
-    var categories []*models.Category
-    o := orm.NewOrm()
-    //var qs QuerySeter
-    num,_:= o.QueryTable("category").All(&categories)
-    if num>0{
-        this.Data["Categories"] = categories
-    }else{
-         this.Data["Categories"] =categories
+func (this *TopicController) EditPage(){
+    tid :=this.Input().Get("id")
+    tidNum, err := strconv.ParseInt(tid, 10, 64)
+    if err != nil {
+         beego.Error(err)
     }
+    o := orm.NewOrm()
+    cates := make([]*models.Category, 0)
+    qs := o.QueryTable("category")
+    _, err = qs.All(&cates)
+    if err != nil {
+        beego.Error(err)
+    }
+    this.Data["Categories"] = cates
+    article := &models.Article{Id: tidNum}
+    qss := o.QueryTable("article")
+    err = qss.Filter("id", tidNum).One(article)
+    if err !=nil{
+         fmt.Println("---- ",err)
+    }
+    this.Data["Article"] = article
+    this.TplName = "editArticle.tpl"
 
-	this.TplName = "topic_add.html"
-	this.Data["IsLogin"] = true
 }
 
 func (this *TopicController) Delete() {
@@ -193,7 +192,7 @@ func (this *TopicController) Modify() {
 		beego.Error(err)
 		this.Redirect("/", 302)
 	}
-	this.Data["Topic"] = topic
+	this.Data["Article"] = topic
 	this.Data["Tid"] = tid
 	this.Data["IsLogin"] = true
 }

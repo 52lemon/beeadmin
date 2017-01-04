@@ -39,7 +39,8 @@
             <!-- START WIDGETS -->
             <div class="row">
                 <div class="col-md-12">
-                 <form class="form-horizontal" action="/category/save" method="post">
+                 <form class="form-horizontal" action="/category/modify" method="post">
+                            <input type="hidden" value="{{.Category.Id}}" name="id" class="form-control"/>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title"><strong>One Column</strong> Layout</h3>
@@ -53,26 +54,35 @@
                                         <div class="col-md-6 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input type="text" value="{{.Category.Title}}" name="name" class="form-control"/>
+                                                <input type="text" value="{{.Category.Title}}" name="title" class="form-control"/>
                                             </div>                                            
                                             <span class="help-block">This is sample of text field</span>
                                         </div>
                                     </div>
-                                    
+                                     <div class="form-group">
+                                        <label class="col-md-3 col-xs-12 control-label">父级分类</label>
+                                        <div class="col-md-6 col-xs-12">                                            
+                                            <select class="form-control select" name="category">
+                                             {{range $i:=.Categories}}
+                                                 <option value="{{$i.Id}}">{{$i.Title}}</option>
+                                             {{end}}
+                                            </select>
+                                            <span class="help-block">This is sample of text field</span>
+                                        </div>
+                                    </div>                                    
                                     <div class="form-group">                                        
                                         <label class="col-md-3 col-xs-12 control-label">备注：</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-envelope-o"></span></span>
-                                                <input type="text" class="form-control"/>
+                                                <input type="text" name="desc" class="form-control" value="{{.Category.Description}}"/>
                                             </div>            
                                             <span class="help-block">Password field sample</span>
                                         </div>
-                                    </div>
-                                    
+                                    </div> 
                                 </div>
                                 <div class="panel-footer">
-                                    <button class="btn btn-default">重置</button>                                    
+                                    <button type="submit" class="btn btn-default">重置</button>                                    
                                     <button class="btn btn-primary pull-right">保存</button>
                                 </div>
                             </div>

@@ -59,8 +59,8 @@
                                     <tr id="{{.Id}}">
                                         <td class="text-center">{{.Id}}</td>
                                         <td><strong>{{.Title}}</strong></td>
-                                        <td><strong>{{.Parent}}</strong></td>
-                                        <td><strong>{{.Title}}</strong></td>
+                                        <td><strong>{{.Parent.Id}}</strong></td>
+                                        <td><strong>{{.Description}}</strong></td>
                                         <td>
                                             <a href="/category/edit?id={{.Id}}" class="btn btn-default btn-rounded btn-sm">
                                                 <span class="fa fa-pencil"></span>
