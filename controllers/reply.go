@@ -33,8 +33,6 @@ func (this *ReplyController) Add() {
 
     topic := &models.Article{Id: tidNum}
     if o.Read(topic) == nil {
-        topic.ReplyTime = time.Now()
-        topic.ReplyCount++
         _, err = o.Update(topic)
     }
 	if err != nil {
@@ -72,8 +70,6 @@ func (this *ReplyController) Delete() {
 
     topic := &models.Article{Id: tidNum}
     if o.Read(topic) == nil {
-        topic.ReplyTime = replies[0].Created
-        topic.ReplyCount = int64(len(replies))
         _, err = o.Update(topic)
     }
 	if err != nil {

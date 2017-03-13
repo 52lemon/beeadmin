@@ -54,10 +54,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">标题：</label>
                                     <div class="col-md-6 col-xs-12">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text"name="title" class="form-control"/>
-                                        </div>
+                                        <input type="text"name="title" class="form-control"/>
                                         <span class="help-block">This is sample of text field</span>
                                     </div>
                                 </div>
@@ -75,7 +72,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">缩略图：</label>
                                     <div class="col-md-6 col-xs-12">
-                                            <input type="file" name="attachment"  class="file" data-preview-file-type="any"/>
+                                        <input type="file" name="attachment"  class="file" data-preview-file-type="any"/>
                                         <span class="help-block">Click on input field to get datepicker</span>
                                     </div>
                                 </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <!-- META SECTION -->
-    <title>Joli Admin - Responsive Bootstrap Admin Template</title>
+    <title>{{.Article.Title}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,6 +13,9 @@
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="../static/joli/css/theme-default.css"/>
     <!-- EOF CSS INCLUDE -->
+    <style>
+        .img-thumbnail{width:120px;height:120px;}
+    </style>
 </head>
 <body>
 <!-- START PAGE CONTAINER -->
@@ -54,58 +57,40 @@
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">标题：</label>
                                     <div class="col-md-6 col-xs-12">
-                                        <input type="text"name="title" value="{{.Article.Title}}" class="form-control"/>
-                                        <span class="help-block">This is sample of text field</span>
+                                        <div>{{.Article.Title}}</div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">分类：</label>
                                     <div class="col-md-6 col-xs-12">
-                                        <select class="form-control select" name="category">
-                                        {{range .Categories}}
-                                            <option value="{{.Id}}">{{.Title}}</option>
-                                        {{end}}
-                                        </select>
-                                        <span class="help-block">Select box example</span>
+                                        <div>{{.Category.id}}</div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">缩略图：</label>
                                     <div class="col-md-6 col-xs-12">
-                                            <input type="file" name="attachment"  class="file" data-preview-file-type="any"/>
-                                        <span class="help-block">Click on input field to get datepicker</span>
+                                        <img src="{{makeUrl `80095618-a274-48d9-b117-f23e3e51bc70.jpeg`}}"  class="img-thumbnail"/>
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">简介:</label>
                                     <div class="col-md-6 col-xs-12">
-                                        <textarea class="form-control" value="" name="summary" rows="5">{{.Article.Summary}}</textarea>
-                                        <span class="help-block">Click on input field to get datepicker</span>
+                                        <div class="">{{.Article.Summary}}</div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">内容：</label>
                                     <div class="col-md-6 col-xs-12">
-                                    <textarea class="summernote" name="content">{{.Article.Content}}</textarea>
-                                        <span class="help-block">Default textarea field</span>
+                                        <div class="">{{html2str .Article.Content}}</div>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-3 col-xs-12 control-label">标签：</label>
-                                    <div class="col-md-6 col-xs-12">
-                                        <input type="text" class="tagsinput"name="lable" value="First,Second,Third"/>
-                                        <span class="help-block">Default textarea field</span>
-                                    </div>
-                                </div>
-
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">推荐：</label>
                                     <div class="col-md-6 col-xs-12">
-                                        <label class="check"><input type="checkbox" class="icheckbox" checked="checked"/> Checkbox title</label>
-                                        <span class="help-block">Checkbox sample, easy to use</span>
+                                        <label class="check">
+                                            <input type="checkbox" class="icheckbox" checked="checked" disabled/> Checkbox title
+                                        </label>
                                     </div>
                                 </div>
 

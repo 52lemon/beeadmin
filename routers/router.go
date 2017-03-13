@@ -18,6 +18,7 @@ func init() {
     beego.Router("/article/add", &controllers.TopicController{},"get:AddPage")
     beego.Router("/article/save", &controllers.TopicController{},"post:Save")
     beego.Router("/article/edit", &controllers.TopicController{},"get:EditPage")
+    beego.Router("/article/show", &controllers.TopicController{},"get:ShowPage")
     beego.Router("/article/modify", &controllers.TopicController{},"post:Modify")
     beego.Router("/reply", &controllers.ReplyController{})
     beego.Router("/reply/add", &controllers.ReplyController{}, "post:Add")

@@ -1,7 +1,7 @@
 $(document).ready(function(){        
     
     /* PROGGRESS START */
-    $.mpb("show",{value: [0,50],speed: 5});        
+    //$.mpb("show",{value: [0,50],speed: 5});        
     /* END PROGGRESS START */
     
     var html_click_avail = true;

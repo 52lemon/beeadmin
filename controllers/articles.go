@@ -1,16 +1,22 @@
 package controllers
 
 import (
-	"path"
+     "os"
 	"strings"
     _"encoding/json"
     "strconv"
     "time"
     "fmt"
+    "log"
 	"github.com/astaxie/beego"
     "github.com/astaxie/beego/orm"
 	"beeadmin/models"
+    "encoding/base64"
+    "github.com/satori/go.uuid"
+    "path/filepath"
+    "path"
 )
+
 
 type TopicController struct {
 	BaseController
@@ -53,23 +59,56 @@ func (this *TopicController) Save() {
 	content := this.Input().Get("content")
 	category := this.Input().Get("category")
 	lable := this.Input().Get("lable")
+	summary := this.Input().Get("summary")
 
 	// 获取附件
-	_, fh, err := this.GetFile("attachment")
+	f, fh, err := this.GetFile("attachment")
+    defer f.Close()
 	if err != nil {
 		beego.Error(err)
 	}
 
+    u1 := uuid.NewV4()
+    fmt.Printf("UUIDv4: %s\n", u1)
+    fmt.Printf("UUIDv4: %s\n", u1.Variant())
+    fmt.Printf("UUIDv4: %s\n", u1.Version())
+    /*switch v2 := u1.(type) {
+        case string:
+            fmt.Println(u1, "is string", v2)
+        case int:
+            fmt.Println(u1, "is int", v2)
+        case bool:
+            fmt.Println(u1, "is bool", v2)
+        default:
+            fmt.Println(u1, "is another type not handle yet")
+    }*/
 	var attachment string
 	if fh != nil {
 		// 保存附件
 		attachment = fh.Filename
 		beego.Info(attachment)
-		err = this.SaveToFile("attachment", path.Join("attachment", attachment))
+		err = this.SaveToFile("attachment", "static/upload/" + attachment)
 		if err != nil {
 			beego.Error(err)
 		}
 	}
+   
+   
+    ff, _ := os.Open("static/upload/"+attachment)
+    dir := filepath.Dir("static/upload/")
+    filenameWithSuffix := path.Base(attachment)
+    fmt.Println("filenameWithSuffix =", filenameWithSuffix)
+    fileSuffix := path.Ext(filenameWithSuffix)
+    fmt.Println("fileSuffix =", fileSuffix)
+    suffix := u1.String()+fileSuffix 
+    os.Rename("static/upload/"+attachment, filepath.Join(dir, suffix))
+    defer ff.Close()
+    sourcebuffer := make([]byte, 500000)
+    n, _ := ff.Read(sourcebuffer)
+    //base64压缩
+    sourcestring := base64.StdEncoding.EncodeToString(sourcebuffer[:n])
+   
+    //fmt.Println(sourcestring)
 
     lable = "$" + strings.Join(strings.Split(lable, " "), "#$") + "#"
     o := orm.NewOrm()
@@ -83,15 +122,43 @@ func (this *TopicController) Save() {
     if err != nil {
         beego.Error(err)
     }
+    user := models.User{Name: "admin"}
+    if created, id, err := o.ReadOrCreate(&user, "Name"); err == nil {
+       if created {
+           fmt.Println("New Insert an object. Id:", id)
+       }else {
+        fmt.Println("Get an object. Id:", id)
+       }
+    }
+
+    var album  models.Album
+    album.Owner = &user
+    ids, erro := o.Insert(&album)
+    if erro == nil {
+        fmt.Println(ids)
+    }else{
+        fmt.Println(erro)
+    }
+    var image models.Image
+    image.Thumbnail = sourcestring
+    image.Created = time.Now()
+    image.Owner = &user 
+    image.Album = &album
+    image.Uuid = u1.String()
+    id, errors := o.Insert(&image)
+    if errors == nil {
+        fmt.Println(id)
+    }else{
+        fmt.Println(errors)
+    }
     article := &models.Article{
         Title:      title,
         Category:   cate,
         Lables:     lable,
+        Thumbnail:  &image,
+        Summary:    summary,
         Content:    content,
-        ReplyTime:  time.Now(),
-        Attachment: attachment,
         Created:    time.Now(),
-        Updated:    time.Now(),
     }
     _, err = o.Insert(article)
 
@@ -134,9 +201,50 @@ func (this *TopicController) EditPage(){
     if err !=nil{
          fmt.Println("---- ",err)
     }
+    pid := article.Thumbnail.Id
+    log.Println("pid - -",pid)
+    image :=&models.Image{Id:pid}
+    im := o.QueryTable("image") 
+    err = im.Filter("id", pid).One(image)
+    if err !=nil{
+         log.Println("---- ",err)
+    }
+    this.Data["Image"] = image
     this.Data["Article"] = article
     this.TplName = "editArticle.tpl"
+}
 
+func (this *TopicController) ShowPage(){
+    tid :=this.Input().Get("id")
+    tidNum, err := strconv.ParseInt(tid, 10, 64)
+    if err != nil {
+         beego.Error(err)
+    }
+    o := orm.NewOrm()
+    cates := make([]*models.Category, 0)
+    qs := o.QueryTable("category")
+    _, err = qs.All(&cates)
+    if err != nil {
+        beego.Error(err)
+    }
+    this.Data["Categories"] = cates
+    article := &models.Article{Id: tidNum}
+    qss := o.QueryTable("article")
+    err = qss.Filter("id", tidNum).One(article)
+    if err !=nil{
+         fmt.Println("---- ",err)
+    }
+    pid := article.Thumbnail.Id
+    log.Println("pid - -",pid)
+    image :=&models.Image{Id:pid}
+    im := o.QueryTable("image") 
+    err = im.Filter("id", pid).One(image)
+    if err !=nil{
+         log.Println("---- ",err)
+    }
+    this.Data["Image"] = image
+    this.Data["Article"] = article
+    this.TplName = "showArticle.tpl"
 }
 
 func (this *TopicController) Delete() {

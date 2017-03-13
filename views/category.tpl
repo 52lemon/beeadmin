@@ -1,48 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Joli Admin - Responsive Bootstrap Admin Template</title>
+    <title>分类列表</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" id="theme" href="../static/joli/css/theme-default.css"/>
+    <link rel="stylesheet" type="text/css"  href="../static/css/common.css"/>
+    <style>
+      .nav-tabs, .nav-tabs.nav-justified {padding: 0px;}
+      .nav-tabs{background-color:#fff;border-bottom:1px solid #ddd;}
+      .nav-tabs>li{margin-bottom:-2px;}
+      .nav-tabs>li.active{border-left:1px solid #ccc;border-right:1px solid #ccc;margin-bottom:-2px;}
+      .nav-tabs>li>a{margin-right:0!important;background-color:#fff;}
+      .nav-tabs>li.active>a{margin-right:0!important;}
+    </style>
 </head>
 <body>
 <div class="page-container">
     {{template "pageheader"}}
-
     <div class="page-content">
-
         {{template "top"}}
-
         <ul class="breadcrumb">
             <li><a href="#">Home</a></li>
             <li><a href="#">Tables</a></li>
             <li class="active">Basic</li>
         </ul>
-        <!-- END BREADCRUMB -->
-
-        <!-- PAGE TITLE -->
-        <div class="page-title">
-            <h2><span class="fa fa-arrow-circle-o-left"></span> 分类列表</h2>
-        </div>
-        <!-- END PAGE TITLE -->
-
-        <!-- PAGE CONTENT WRAPPER -->
         <div class="page-content-wrap">
-
-            <!-- START RESPONSIVE TABLES -->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel panel-default">
-
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><a href="/category/add" class="btn btn-success btn-block">新增</a></h3>
-                        </div>
-
-                        <div class="panel-body panel-body-table">
-
+                    <div class="panel panel-default tabs">                            
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="active">
+                                <a href="#tab-first" role="tab" data-toggle="tab">分类列表</a>
+                            </li>
+                            <li>
+                                <a href="#tab-second" role="tab" data-toggle="tab">分类树</a>
+                            </li>
+                        </ul>
+                        <div class="panel-body tab-content">
+                            <div class="tab-pane active" id="tab-first">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-actions">
                                     <thead>
@@ -73,22 +71,20 @@
                                     {{end}}
                                     </tbody>
                                 </table>
+                            </div>                                
                             </div>
-
+                            <div class="tab-pane" id="tab-second">
+                                
+                            </div>                                        
                         </div>
-                    </div>
-
+                        <div class="panel-footer">                                                                        
+                        </div>
+                    </div> 
                 </div>
             </div>
-            <!-- END RESPONSIVE TABLES -->
-
-            <!-- END PAGE CONTENT WRAPPER -->
         </div>
     </div>
-    <!-- END PAGE CONTENT -->
-</div>
-<!-- END PAGE CONTAINER -->
-
+{{template "footer"}}
 <!-- MESSAGE BOX-->
 <div class="message-box animated fadeIn" data-sound="alert" id="mb-remove-row">
     <div class="mb-container">
@@ -108,34 +104,6 @@
     </div>
 </div>
 <!-- END MESSAGE BOX-->
-
-<!-- MESSAGE BOX-->
-<div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
-    <div class="mb-container">
-        <div class="mb-middle">
-            <div class="mb-title"><span class="fa fa-sign-out"></span> Log <strong>Out</strong> ?</div>
-            <div class="mb-content">
-                <p>Are you sure you want to log out?</p>
-                <p>Press No if youwant to continue work. Press Yes to logout current user.</p>
-            </div>
-            <div class="mb-footer">
-                <div class="pull-right">
-                    <a href="pages-login.html" class="btn btn-success btn-lg">Yes</a>
-                    <button class="btn btn-default btn-lg mb-control-close">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<audio id="audio-alert" src="../static/joli/audio/alert.mp3" preload="auto"></audio>
-<audio id="audio-fail" src="../static/joli/audio/fail.mp3" preload="auto"></audio>
-<script type="text/javascript" src="../static/joli/js/plugins/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="../static/joli/js/plugins/bootstrap/bootstrap.min.js"></script>
-<script type='text/javascript' src='../static/joli/js/plugins/icheck/icheck.min.js'></script>
-<script type="text/javascript" src="../static/joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-<script type="text/javascript" src="../static/joli/js/settings.js"></script>
-<script type="text/javascript" src="../static/joli/js/plugins.js"></script>
-<script type="text/javascript" src="../static/joli/js/actions.js"></script>
 <script>
 function delete_row(row){
         var box = $("#mb-remove-row");

@@ -15,6 +15,10 @@ func init() {
 	models.RegisterDB()
 }
 
+func makeUrl(source string) string { 
+    return  "/static/upload/"+source
+}
+
 func main() {
 	// 开启 ORM 调试模式
 	orm.Debug = true
@@ -23,7 +27,8 @@ func main() {
 
 	// 附件处理
 	os.Mkdir("attachment", os.ModePerm)
-
+   
+    beego.AddFuncMap("makeUrl",makeUrl)
 	// 启动 beego
 	beego.Run()
 }

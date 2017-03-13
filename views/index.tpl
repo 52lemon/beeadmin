@@ -1,34 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- META SECTION -->
-    <title>Joli Admin - Responsive Bootstrap Admin Template</title>
+    <title>beeadmin首页</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <!-- END META SECTION -->
-
-    <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="../static/joli/css/theme-default.css"/>
-    <!-- EOF CSS INCLUDE -->
 </head>
 <body>
-<!-- START PAGE CONTAINER -->
 <div class="page-container">
-
-    <!-- START PAGE SIDEBAR -->
     {{template "pageheader"}}
-    <!-- END PAGE SIDEBAR -->
-
-    <!-- PAGE CONTENT -->
+     <div class="page-content">
     {{template "top"}}
-    <!-- END PAGE CONTENT -->
+     </div>
 </div>
-<!-- END PAGE CONTAINER -->
-
-<!-- MESSAGE BOX-->
 <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
     <div class="mb-container">
         <div class="mb-middle">
