@@ -15,6 +15,7 @@ border-bottom-right-radius: 0;}
 .input-group[class*=col-] {display: inline-flex;}
 .page-container {width: 100%;float: left;height: 97vh;position: relative;background: #1b1e24;}                                               
 .page-footer{background: #1b1e24;height: 30px;bottom: 0;z-index:999;color: #fff;font-size:1.2rem;}
-.page-container .page-content {min-height: 97%;}
+.page-container .page-content {min-height:97vh;}
 .breadcrumb{background-color:#fff;}
 th,td{text-align:center;}
+.page-container .page-sidebar {height: 97vh;}

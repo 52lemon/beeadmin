@@ -11,5 +11,6 @@ type HomeController struct {
 }
 
 func (this *HomeController) Get() {
+    
     this.TplName = "index.tpl"
 }

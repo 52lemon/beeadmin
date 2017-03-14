@@ -64,3 +64,17 @@ func (base *BaseController) RetError(e *ControllerError) {
     base.StopRun()
 }
 
+func(base *BaseController)IsLogin(){
+    
+}
+
+func(base *BaseController)SetLogin(uname string,token string){
+    v := base.GetSession(uname)
+    if v == nil {
+        base.SetSession(uname, token)
+        base.Data["num"] = 0
+    } else {
+        base.SetSession(uname, token)
+        base.Data["num"] = v.(int)
+    }
+}
