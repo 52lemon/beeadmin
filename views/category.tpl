@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" id="theme" href="../static/joli/css/theme-default.css"/>
+    <link rel="stylesheet" type="text/css" id="theme" href="/static/vakata-jstree-3.3.3/dist/themes/default/style.min.css"/>
     <link rel="stylesheet" type="text/css"  href="../static/css/common.css"/>
     <style>
       .nav-tabs, .nav-tabs.nav-justified {padding: 0px;}
@@ -41,6 +42,18 @@
                         </ul>
                         <div class="panel-body tab-content">
                             <div class="tab-pane active" id="tab-first">
+                                <div class="panel-heading">
+                                    <div class="input-group push-down-10 col-md-4">
+                                       <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                                       <input type="text" class="form-control" placeholder="请输入关键字...">
+                                       <div class="input-group-btn">
+                                           <button class="btn btn-primary">Search</button>
+                                       </div>
+                                    </div>
+                                    <h3 class="panel-title pull-right">
+                                        <a href="/category/add" class="btn btn-success btn-block btn-func">新增</a>
+                                    </h3>
+                                </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-actions">
                                     <thead>
@@ -74,7 +87,20 @@
                             </div>                                
                             </div>
                             <div class="tab-pane" id="tab-second">
-                                
+                                <div id="jstree" class="demo">
+                                    <ul>
+                                    {{range .Trees}} 
+                                        {{if .Haschildren}}
+                                            <li id={{.Id}}>{{.Text}} <ul>
+                                        {{else}}
+                                            <li id={{.Id}} data-jstree='{"icon":"//jstree.com/tree.png"}'>{{.Text}}</li>
+                                        {{end}}
+                                        {{range .Hero}}
+                                            </ul></li>
+                                        {{end}}
+                                    {{end}}
+                                    </ul>
+                                </div> 
                             </div>                                        
                         </div>
                         <div class="panel-footer">                                                                        
@@ -104,7 +130,9 @@
     </div>
 </div>
 <!-- END MESSAGE BOX-->
+<script src="/static/vakata-jstree-3.3.3/dist/jstree.min.js"></script>
 <script>
+$('#jstree').jstree();
 function delete_row(row){
         var box = $("#mb-remove-row");
         box.addClass("open");
