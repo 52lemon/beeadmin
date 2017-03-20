@@ -7,8 +7,9 @@ $(document).ready(function(){
     var html_click_avail = true;
     
     $("html").on("click", function(){
-        if(html_click_avail)
-            $(".x-navigation-horizontal li,.x-navigation-minimized li").removeClass('active');        
+        if(html_click_avail){
+            //$(".x-navigation-horizontal li,.x-navigation-minimized li").removeClass('active');        
+        }
     });        
     
     $(".x-navigation-horizontal .panel").on("click",function(e){

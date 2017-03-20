@@ -254,14 +254,8 @@ func (this *CategoryController)CateAdd(){
         fmt.Println(cate.Id)
         fmt.Println(cate.Title)
         category := &models.Category{Title: name,Created:time.Now(),Parent:cate,Description:des}
-    // 查询数据
-   // qs := o.QueryTable("category")
-   // err := qs.Filter("title", name).One(cate)
-   // if err == nil {
-   //     return err
-   // }
 
-    // 插入数据
+        // 插入数据
         _, err = o.Insert(category)
         if err != nil {
             beego.Error(err) 
@@ -287,3 +281,89 @@ func (this *CategoryController)CateDel(){
      this.Data["json"] = models.NewNormalInfo("Succes")
      this.ServeJSON()
 }
+
+func (this *CategoryController)TreeDel(){
+     id := this.Input().Get("id") 
+     log.Println(id)
+     cid, err := strconv.ParseInt(id, 10, 64)
+     if err != nil {
+        beego.Error(err)
+     }
+     o := orm.NewOrm()
+     cate := &models.Category{Id: cid}
+     _, err = o.Delete(cate)
+     if err !=nil{
+        this.Data["json"] = models.NewErrorInfo("Error")
+        this.ServeJSON()
+        return
+     }
+     this.Data["json"] = models.NewNormalInfo("Succes")
+     this.ServeJSON()
+}
+
+func (this *CategoryController)TreeGet(){
+     id := this.Input().Get("id") 
+     log.Println(id)
+     cid, err := strconv.ParseInt(id, 10, 64)
+     if err != nil {
+         beego.Error(err)
+     }
+     cate := models.Category{Id: cid}
+     o := orm.NewOrm()
+     err = o.Read(&cate)
+     if err == orm.ErrNoRows {
+        fmt.Println("查询不到")
+     } else if err == orm.ErrMissPK {
+        fmt.Println("找不到主键")
+     } 
+     this.Data["json"] = cate
+     this.ServeJSON()
+}
+
+func (this *CategoryController)TreeSave(){
+     name:= this.Input().Get("name") 
+     p_id:= this.Input().Get("parent") 
+     //log.Println(id)
+     o := orm.NewOrm()
+     cid, err := strconv.ParseInt(p_id, 10, 64)
+     if err != nil {
+         beego.Error(err)
+     }
+     parent := models.Category{Id: cid}
+     err = o.Read(&parent)
+     if err != nil {
+        beego.Error(err)
+     }
+     category := models.Category{Title: name,Created:time.Now(),Parent:&parent,Description:name}  
+     id, err := o.Insert(&category)
+     if err == nil {
+        fmt.Println(id)
+        this.Data["json"] =  models.NewNormalInfo("Succes")
+     }else{
+       
+       this.Data["json"] = models.NewNormalInfo("Error")
+     }
+     this.ServeJSON()
+}
+
+func (this *CategoryController)TreeModify(){
+     name:= this.Input().Get("name") 
+     c_id:= this.Input().Get("id") 
+     //log.Println(id)
+     cid, err := strconv.ParseInt(c_id, 10, 64)
+     if err != nil {
+            beego.Error(err)
+     }
+     o := orm.NewOrm()
+     num, erro := o.QueryTable("category").Filter("id", cid).Update(orm.Params{
+        "title": name,
+     })
+     if erro != nil {
+        this.Data["json"] = models.NewNormalInfo("Error")
+     }else{
+        this.Data["json"] =  models.NewNormalInfo("Succes")
+        fmt.Printf("Affected Num: %s, %s", num, err)
+     }
+     this.ServeJSON()
+}
+

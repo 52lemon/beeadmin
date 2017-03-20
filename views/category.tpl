@@ -54,44 +54,44 @@
                                         <a href="/category/add" class="btn btn-success btn-block btn-func">新增</a>
                                     </h3>
                                 </div>
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-actions">
-                                    <thead>
-                                    <tr>
-                                        <th>编号</th>
-                                        <th>名称</th>
-                                        <th>父类</th>
-                                        <th>备注</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {{range .Categories}}
-                                    <tr id="{{.Id}}">
-                                        <td class="text-center">{{.Id}}</td>
-                                        <td><strong>{{.Title}}</strong></td>
-                                        <td><strong>{{.Parent.Id}}</strong></td>
-                                        <td><strong>{{.Description}}</strong></td>
-                                        <td>
-                                            <a href="/category/edit?id={{.Id}}" class="btn btn-default btn-rounded btn-sm">
-                                                <span class="fa fa-pencil"></span>
-                                            </a>
-                                            <button class="btn btn-danger btn-rounded btn-sm" onClick="delete_row('{{.Id}}');">
-                                                <span class="fa fa-times"></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    {{end}}
-                                    </tbody>
-                                </table>
-                            </div>                                
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-actions">
+                                        <thead>
+                                           <tr>
+                                               <th>编号</th>
+                                               <th>名称</th>
+                                               <th>父类</th>
+                                               <th>备注</th>
+                                               <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{range .Categories}}
+                                        <tr id="{{.Id}}">
+                                            <td class="text-center">{{.Id}}</td>
+                                            <td><strong>{{.Title}}</strong></td>
+                                            <td><strong>{{.Parent.Id}}</strong></td>
+                                            <td><strong>{{.Description}}</strong></td>
+                                            <td>
+                                                <a href="/category/edit?id={{.Id}}" class="btn btn-default btn-rounded btn-sm">
+                                                    <span class="fa fa-pencil"></span>
+                                                </a>
+                                                <button class="btn btn-danger btn-rounded btn-sm" onClick="delete_row('{{.Id}}');">
+                                                    <span class="fa fa-times"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {{end}}
+                                        </tbody>
+                                    </table>
+                                </div>                                
                             </div>
                             <div class="tab-pane" id="tab-second">
-                                <div id="jstree" class="demo">
+                                <div id="jstree" class="demo col-xs-5">
                                     <ul>
                                     {{range .Trees}} 
                                         {{if .Haschildren}}
-                                            <li id={{.Id}}>{{.Text}} <ul>
+                                            <li id={{.Id}} data-jstree='{ "opened" : true }'>{{.Text}} <ul>
                                         {{else}}
                                             <li id={{.Id}} data-jstree='{"icon":"//jstree.com/tree.png"}'>{{.Text}}</li>
                                         {{end}}
@@ -101,6 +101,15 @@
                                     {{end}}
                                     </ul>
                                 </div> 
+                                <div class="col-xs-4" style="margin-top:50px;">
+                                    <p><label>分类名称：</label><span id="c_name"></span></p>
+                                    <p><label>父类名称：</label><span id="c_parent"></span></p>
+                                    <p><label>分类描述：</label><span id="c_description"></span></p>
+                                    <form action="/category/edit" method="get" onsubmit="return test();">
+                                        <input type="hidden" name="id" id="c_edit" value />
+                                        <button type="submit" class="btn btn-info pull-right" id="submits">编辑</button>
+                                    </form>
+                                </div>
                             </div>                                        
                         </div>
                         <div class="panel-footer">                                                                        
@@ -132,16 +141,157 @@
 <!-- END MESSAGE BOX-->
 <script src="/static/vakata-jstree-3.3.3/dist/jstree.min.js"></script>
 <script>
-$('#jstree').jstree();
+//$('#jstree').jstree();
+function test(){
+    if ( 1 == jQuery("#c_edit").val() ) {alert("不能编辑系统预置分类"); return false;}
+    else if ( jQuery("#c_edit").val() ) { return true;}
+    else { alert("你还没选择一个分类"); return false;};
+}
+
+function context_menu(node){
+    var tree = jQuery('#jstree').jstree(true);
+    // The default set of all items
+    var items = {
+        "Create": {
+            "separator_before": false,
+            "separator_after": false,
+            "label": "新  建",
+            "action": function (obj) { 
+                var jQuerynode = tree.create_node(node);
+                tree.edit(jQuerynode);
+            }
+        },
+        "Rename": {
+            "separator_before": false,
+            "separator_after": false,
+            "label": "重命名",
+            "action": function (obj) { 
+                tree.edit(node);
+            }
+        },
+        "Remove": {
+            "separator_before": true,
+            "separator_after": false,
+            "label": "删  除",
+            "action": function (obj) { 
+                if(confirm('确认删除该分类?')){
+                    tree.delete_node(node);
+                    jQuery.noConflict().ajax({
+                        url: "/ctree/delete",
+                        data: {"id":node.id},
+                        type: "post",
+                        dataType: "json",
+                        success: function(data,textStatus){
+                            //location.reload();      
+                        },error: function(XMLHttpRequest, textStatus, errorThrown){
+                            alert("删除失败");
+                        }
+                    });
+                }
+            }
+        }
+    };
+    return items;
+}
+var flags='false';
+jQuery(function () {
+    jQuery('#jstree').bind("loaded.jstree", function (e, data) {
+         console.dir(e);
+         console.dir(data);
+     }).jstree({
+        "core" : {
+            "check_callback" : true,
+        },
+        "types" : {
+                "default" : {
+                    "icon" : "fa fa-folder icon-state-warning icon-lg"
+                },
+                "file" : {
+                    "icon" : "fa fa-file icon-state-warning icon-lg"
+                },
+                "" : {
+                    "icon" : "fa fa-file icon-state-warning icon-lg"
+                }
+        },
+        "plugins" : [ 'contextmenu', "dnd", 'sort', "state" ],
+        contextmenu : { items: context_menu }
+    });
+   // jQuery('#jstree').jstree().open_all();
+    jQuery('#jstree').on("changed.jstree",function (c,data) {
+        jQuery("#c_description").empty();
+        jQuery("#c_name").empty();
+        jQuery("#c_parent").empty();
+        jQuery("#c_edit").val(null);       
+        try{
+            var c_id = data.node.id;
+            console.log('-----c_id = ------- '+c_id);
+            jQuery.noConflict().ajax({
+                url: "/ctree/get",
+                data: {"id":c_id},
+                type: "get",
+                dataType: "json",
+                success: function(e){
+                    jQuery('#c_description').html(e.Description);
+                    jQuery("#c_name").html(e.Title);
+                    jQuery("#c_parent").html(e.Parent.Id);
+                    jQuery("#c_edit").val(e.Id);       
+                },
+                error: function(){alert("获取分类信息失败");}
+            });
+        }catch(e){
+           console.log(e);
+        }
+    })
+    jQuery('#jstree').jstree().open_all();
+    jQuery('#jstree').on('create_node.jstree', function (e, data) {
+        flags='true';
+        mysets = data.node.id.split("_");
+        data.node.li_attr.id = data.node.text;
+    });
+    jQuery('#jstree').on('rename_node.jstree', function (e, data) {
+        if(flags=='true'){ 
+            jQuery.noConflict().ajax({
+                url: "/ctree/save",
+                data: {"name":data.text,"parent":data.node.parent},
+                type: "post",
+                dataType: "json",
+                success: function(data,textStatus){
+                    flags="false"; 
+                   // location.reload();      
+                },error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log(XMLHttpRequest.status);
+                    console.dir(XMLHttpRequest);
+                    alert("新增分类失败");
+                }
+            });
+        }else{
+            jQuery.noConflict().ajax({
+                url: "/ctree/modify",
+                data: {"name":data.text,"id":data.node.id},
+                type: "post",
+                dataType: "json",
+                success: function(data){
+                    //location.reload();      
+                },
+                error: function(){alert("修改分类失败");}
+            });
+        }
+    });
+    jQuery('button').on('click', function () {
+        jQuery('#jstree').jstree(true).select_node('child_node_1');
+        jQuery('#jstree').jstree('select_node', 'child_node_1');
+        jQuery.jstree.reference('#jstree').select_node('child_node_1');
+    });
+});
 function delete_row(row){
         var box = $("#mb-remove-row");
         box.addClass("open");
         box.find(".mb-control-yes").on("click",function(){
             jQuery.ajax({
-                url: "/category/delete",
+                url: "/ctree/delete",
                 data:{"id":row},
                 dataType:"json",
-                type:"get",
+                type:"post",
             }).done(function (data) {
                 //layer.msg('提交成功！');      
                 box.removeClass("open");
@@ -155,7 +305,6 @@ function delete_row(row){
         box.find(".mb-control-close").on("click",function(){
             box.removeClass("open");                                                                                                             
         });
-
 }
 </script>
 </body>

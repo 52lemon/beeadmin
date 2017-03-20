@@ -607,16 +607,16 @@ $(function() {
             var i  = $.isArray(settings.value) ? settings.value[0] : $(".mpb .mpb-progress").width();
             var to = $.isArray(settings.value) ? settings.value[1] : settings.value;            
             
-            var timer = setInterval(function(){
-                $(".mpb .mpb-progress").css('width',i+'%'); i++;
+            //var timer = setInterval(function(){
+            //    $(".mpb .mpb-progress").css('width',i+'%'); i++;
                 
-                if(i > to){
-                    clearInterval(timer);
-                    if($.isFunction(settings.complete)){
-                        settings.complete.call(this);
-                    }
-                }
-            }, settings.speed);
+           //     if(i > to){
+           //         clearInterval(timer);
+          //          if($.isFunction(settings.complete)){
+          //              settings.complete.call(this);
+          //          }
+          //      }
+          //  }, settings.speed);
 
         }
 
