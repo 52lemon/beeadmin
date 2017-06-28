@@ -24,7 +24,7 @@ func (this *LoginController) Get() {
 		return
 	}
 
-	this.TplName = "login.tpl"
+	this.TplName = "login.html"
 }
 
 func GenToken()string{

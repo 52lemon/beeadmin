@@ -156,14 +156,14 @@ func (this *CategoryController) Get() {
     lists := make([]*Tree,0,0)
     lists = Trees() 
     fmt.Println("------",lists)
-	this.TplName = "category.tpl"
+	this.TplName = "category.html"
     fmt.Println("category is",cates)
 	this.Data["Categories"] = cates
 	this.Data["Trees"] = lists
 }
 
 func (this *CategoryController)AddPage(){
-    this.TplName ="addCategory.tpl"
+    this.TplName ="addCategory.html"
     o := orm.NewOrm()
     cates := make([]*models.Category, 0)
     qs := o.QueryTable("category")
@@ -193,7 +193,7 @@ func (this *CategoryController)EditPage(){
          beego.Error(err)
      }
      this.Data["Category"] = cate
-     this.TplName ="editCategory.tpl"
+     this.TplName ="editCategory.html"
 }
 
 func (this *CategoryController)Modify(){

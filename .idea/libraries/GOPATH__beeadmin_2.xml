@@ -1,0 +1,59 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;beeadmin&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../tree2" />
+      <root url="file://$PROJECT_DIR$/../tree3" />
+      <root url="file://$PROJECT_DIR$/../uuid" />
+      <root url="file://$PROJECT_DIR$/../webcron" />
+      <root url="file://$PROJECT_DIR$/../iform" />
+      <root url="file://$PROJECT_DIR$/../.idea" />
+      <root url="file://$PROJECT_DIR$/../ugo" />
+      <root url="file://$PROJECT_DIR$/../beeblog" />
+      <root url="file://$PROJECT_DIR$/../pybbs-go" />
+      <root url="file://$PROJECT_DIR$/../test" />
+      <root url="file://$PROJECT_DIR$/../mart" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../mytest3" />
+      <root url="file://$PROJECT_DIR$/../tree" />
+      <root url="file://$PROJECT_DIR$/../opm" />
+      <root url="file://$PROJECT_DIR$/../gotest" />
+      <root url="file://$PROJECT_DIR$/../Test1" />
+      <root url="file://$PROJECT_DIR$/../geewee" />
+      <root url="file://$PROJECT_DIR$/../filetest" />
+      <root url="file://$PROJECT_DIR$/../hello" />
+      <root url="file://$PROJECT_DIR$/../struct" />
+      <root url="file://$PROJECT_DIR$/../beego-blog" />
+      <root url="file://$PROJECT_DIR$/../admin" />
+      <root url="file://$PROJECT_DIR$/../blog" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../tree2" />
+      <root url="file://$PROJECT_DIR$/../tree3" />
+      <root url="file://$PROJECT_DIR$/../uuid" />
+      <root url="file://$PROJECT_DIR$/../webcron" />
+      <root url="file://$PROJECT_DIR$/../iform" />
+      <root url="file://$PROJECT_DIR$/../.idea" />
+      <root url="file://$PROJECT_DIR$/../ugo" />
+      <root url="file://$PROJECT_DIR$/../beeblog" />
+      <root url="file://$PROJECT_DIR$/../pybbs-go" />
+      <root url="file://$PROJECT_DIR$/../test" />
+      <root url="file://$PROJECT_DIR$/../mart" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../mytest3" />
+      <root url="file://$PROJECT_DIR$/../tree" />
+      <root url="file://$PROJECT_DIR$/../opm" />
+      <root url="file://$PROJECT_DIR$/../gotest" />
+      <root url="file://$PROJECT_DIR$/../Test1" />
+      <root url="file://$PROJECT_DIR$/../geewee" />
+      <root url="file://$PROJECT_DIR$/../filetest" />
+      <root url="file://$PROJECT_DIR$/../hello" />
+      <root url="file://$PROJECT_DIR$/../struct" />
+      <root url="file://$PROJECT_DIR$/../beego-blog" />
+      <root url="file://$PROJECT_DIR$/../admin" />
+      <root url="file://$PROJECT_DIR$/../blog" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>

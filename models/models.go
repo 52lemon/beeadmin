@@ -120,5 +120,5 @@ func RegisterDB() {
     // 注册驱动（“sqlite3” 属于默认注册，此处代码可省略）
     orm.RegisterDriver("mysql", orm.DRMySQL)
     // 注册默认数据库
-    orm.RegisterDataBase("default","mysql","root:root@/beeadmin?charset=utf8")
+    orm.RegisterDataBase("default","mysql","root:123456@/beeadmin?charset=utf8")
 }

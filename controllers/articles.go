@@ -23,7 +23,7 @@ type TopicController struct {
 }
 
 func (this *TopicController)Articles(){
-    this.TplName = "articles.tpl"
+    this.TplName = "articles.html"
     pg := this.Input().Get("page")
     fmt.Println("page == %s",pg)
     page,err:= strconv.Atoi(pg)
@@ -174,7 +174,7 @@ func (this *TopicController) AddPage(){
     cates := make([]*models.Category, 0)
     qs := o.QueryTable("category")
     _, err := qs.All(&cates)
-    this.TplName = "addArticle.tpl"
+    this.TplName = "addArticle.html"
     this.Data["Categories"] = cates
     if err != nil {
         beego.Error(err)
@@ -211,7 +211,7 @@ func (this *TopicController) EditPage(){
     }
     this.Data["Image"] = image
     this.Data["Article"] = article
-    this.TplName = "editArticle.tpl"
+    this.TplName = "editArticle.html"
 }
 
 func (this *TopicController) ShowPage(){
@@ -244,7 +244,7 @@ func (this *TopicController) ShowPage(){
     }
     this.Data["Image"] = image
     this.Data["Article"] = article
-    this.TplName = "showArticle.tpl"
+    this.TplName = "showArticle.html"
 }
 
 func (this *TopicController) Delete() {
