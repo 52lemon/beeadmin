@@ -23,7 +23,6 @@ type TopicController struct {
 }
 
 func (this *TopicController)Articles(){
-    this.TplName = "article/list.html"
     pg := this.Input().Get("page")
     fmt.Println("page == %s",pg)
     page,err:= strconv.Atoi(pg)
@@ -45,7 +44,8 @@ func (this *TopicController)Articles(){
       fmt.Println(err)
     }
     this.Data["Articles"] =  topics
-    
+	this.Layout = "base.html"
+	this.TplName = "article/list.html"
 }
 
 func (this *TopicController) Save() {

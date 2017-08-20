@@ -11,6 +11,6 @@ type HomeController struct {
 }
 
 func (this *HomeController) Get() {
-    
+    this.Layout = "base.html"
     this.TplName = "index.html"
 }

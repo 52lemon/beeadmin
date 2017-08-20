@@ -1,0 +1,20 @@
+{{define "base"}}
+<div class="top-menu">
+    <ul class="nav navbar-nav pull-right">
+        <li class="dropdown dropdown-user navbar-hover-bg">
+            <a href="javascript:;" class="dropdown-toggle navbar-a-bg" data-toggle="dropdown" data-hover="dropdown"
+               data-close-others="false" data-delay="0">
+                <span class="username username-hide-on-mobile name-box matgin-right-10">{{ session['admin_name'][0] }}</span>
+                <span class="username username-hide-on-mobile">{{ session['admin_name'] }}</span>
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-default" style="margin-top: 0px;">
+                <li class="hover-li">
+                    <a href="{{ url_for('admin.logout') }}">
+                        &nbsp;&nbsp;<i class="icon-logout"></i>&nbsp;&nbsp;退出登录</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+{{end}}
